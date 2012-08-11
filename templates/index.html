@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IS0801通讯录</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <style type="text/css">
+        i{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container" class="container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>手机</th>
+                    <th class="hidden-phone">邮箱</th>
+                    <th class="hidden-phone">QQ</th>
+                    <th class="hidden-phone">博客</th>
+                    <th class="hidden-phone">人人</th>
+                    <th class="hidden-phone">微博</th>
+                    <th>通讯地址</th>
+                    <th>修改</th>
+                </tr>
+            </thead>
+            <tbody id="contacts-table">
+            </tbody>
+        </table>
+        <button id="new-btn" class="btn btn-small btn-primary">添加</button>
+    </div>
+
+
+    {% raw %}
+    <script type="text/x-handlebars-template" id="form-tmpl">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4>添加/修改个人信息</h4>
+        </div>
+
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <fieldset id="form-body">
+                    <div class="control-group">
+                        <label class="control-label" for="input-name">姓名：</label>
+                        <div class="controls">
+                            <input type="text" class="input" id="input-name" value="{{ name }}" name="name">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-phone">手机：</label>
+                        <div class="controls">
+                            <input type="text" class="input" id="input-phone" placeholder="只填一个,老黄" value="{{ phone }}" name="phone">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-email">邮箱：</label>
+                        <div class="controls">
+                            <input type="text" class="input" id="input-email" value="{{ email }}" name="email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-qq">QQ：</label>
+                        <div class="controls">
+                            <input type="text" class="input" id="input-qq" value="{{ qq }}" name="qq" >
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-blog">博客：</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">http://</span><input type="text" class="input" id="input-blog" value="{{ blog }}" name="blog">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-renren">人人：</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">http://</span><input type="text" class="input" id="input-renren" placeholder="人人主页链接" value="{{ renren }}" name="renren">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-weibo">微博：</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">@</span><input class="input-mini" id="input-weibo-id" type="text" placeholder="微博id" value="{{ weibo_id }}" name="weibo_id" >
+                                <span class="add-on">http://</span><input type="text" class="input-medium" id="input-weibo-url" placeholder="微博主页链接" value="{{ weibo_url }}" name="weibo_url">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="input-address">通讯地址：</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="input-address" placeholder="寄明信片什么的" value="{{ address }}" name="address">
+                        </div>
+                    </div>                    
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            <a href="#" class="btn btn-primary" id="save-btn">Save changes</a>
+        </div>
+
+    </script>
+    {% endraw %}
+
+
+    {% raw %}
+    <script type="text/x-handlebars-template" id="contact-tmpl">
+        <td>{{ name }}</td>
+        <td>{{ phone }}</td>
+        <td class="hidden-phone">{{ email }}</td>
+        <td class="hidden-phone">{{ qq }}</td>
+        <td class="hidden-phone">
+            <a href="{{ blog }}" target="_blank">{{ blog }}</a>
+        </td>
+        <td class="hidden-phone">
+            <a href="{{ renren }}" target="_blank">{{ renren }}</a>
+        </td>
+        <td class="hidden-phone">
+            <a href="{{ weibo_url }}" target="_blank">@{{ weibo_id }}</a>
+        </td>
+        <td>{{ address }}</td>
+        <td class="hidden-phone">
+            <i class="icon-pencil"></i>
+        </td>
+    </script>
+    {% endraw %}
+
+    <script type="text/javascript" src="/public/libs/json2.js"></script>    
+    <script type="text/javascript" src="/public/libs/jquery.min.js"></script>    
+    <script type="text/javascript" src="/public/libs/handlebars.js"></script>    
+    <script type="text/javascript" src="/public/libs/underscore.min.js"></script>    
+    <script type="text/javascript" src="/public/libs/backbone.min.js"></script>    
+
+    <script type="text/javascript" src="/public/libs/bootstrap-transition.js"></script>    
+    <script type="text/javascript" src="/public/libs/bootstrap-modal.js"></script>    
+
+    <script type="text/javascript" src="/public/js/contact.js"></script>
+    <script type="text/javascript" src="/public/js/contacts.js"></script>
+    <script type="text/javascript" src="/public/js/form_view.js"></script>
+    <script type="text/javascript" src="/public/js/contact_view.js"></script>
+    <script type="text/javascript" src="/public/js/app_view.js"></script>
+    <script type="text/javascript" src="/public/js/app.js"></script>
+
+</body>
+</html>
